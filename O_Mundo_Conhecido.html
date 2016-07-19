@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>O Mundo Conhecido</title>
+    <link rel="icon" href="img/brasao-d&a.png" />
+    <link rel="stylesheet" type="text/css" href="bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKcouVUJNd_vt-oqt8zUWh-6Cp5aHwH_4&signed_in=true&libraries=drawing"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <!--<link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />-->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/rpg-awesome.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/map.js"></script>
+    <script>
+        $(function () {
+            $('.draggable').draggable();
+        });
+    </script>
+</head>
+<body>
+    <div class="head-control">
+        <div class="panel-control first col-md-offset-3 col-sm-offset-3 col-md-4 col-sm-4 draggable">
+            <h5 class="col-md-3 col-sm-3 context-control">Pesquisar:</h5>
+            <select class="col-md-9 col-sm-9 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -">
+                <option value="cinzenta">O Pouso da Cinzenta</option>
+                <option value="pedras">As Terras de Sais e Pedras</option>
+                <option value="maraba">O Braço de Marabá</option>
+                <option value="fieldon">As Terras Árduas de Fieldon</option>
+                <option value="zionr">As Terras Árduas de Zionr</option>
+                <option value="matim">As Terras de Matím</option>
+                <option value="confins">Os Confins da Terra</option>
+                <option value="sagmatim">As Terras de SagMátim</option>
+                <option value="niogro">O Deserto de Niogro</option>
+                <option value="mileni">As Terras de Mileni</option>
+            </select>
+        </div>
+        <div class="panel-control last col-md-3 col-sm-3 draggable">
+            <h5 class="col-md-5 col-sm-5 context-control">Coordenadas:</h5>
+            <input class="col-md-7 col-sm-7 form-component" id="coordenadas" disabled />
+        </div>
+    </div>
+    <div class="group-control">
+        <div class="btn-control" id="refresh"><i class="fa fa-refresh"></i>&nbsp;<span>Reiniciar</span></div>
+        <div class="btn-control" id="territorios"><i class="fa fa-map"></i>&nbsp;<span>Territórios</span></div>
+    </div>
+    <div class="footer-controls">
+        <div class="float-left">
+            <div class="panel-control first col-md-4 col-sm-4 draggable">
+                <h5 class="col-md-4 col-sm-4 context-control">Distância:</h5>
+                <input class="col-md-8 col-sm-8" id="distancia" />
+            </div>
+            <div class="panel-control last col-md-8 col-sm-8 draggable">
+                <h5 class="col-md-4 col-sm-4 context-control">Tempo de Viagem</h5>
+                <select id="modo" class="form-component" onchange="calcTime()" title="- Selecione -">
+                    <option value="0" selected>- Selecione -</option>
+                    <option value="4.17">Passos Curtos</option><!-- desc -->
+                    <option value="7.14">Passos Longos</option><!-- desc -->
+                    <option value="11.11">Galopes Curtos</option><!-- desc -->
+                    <option value="33.33">Galopes Longos</option><!-- desc -->
+                    <option value="20.0">Velas Curtas</option><!-- ndesc -->
+                    <option value="34.0">Velas Longas</option><!-- ndesc -->
+                    <option value="100.0">Voo Lento</option><!-- ndesc -->
+                    <option value="300.0">Voo Rápido</option><!-- ndesc -->
+                </select>
+                <input class="col-md-4 col-sm-4" id="tempo" disabled />
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+</body>
+</html>
