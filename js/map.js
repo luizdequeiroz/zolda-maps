@@ -4,6 +4,11 @@ var marker;
 var Map;
 var mapMarkers = new Array();
 
+/* abaixo: para capturar coordenada para os territórios */
+var latsMarkers = new Array();
+var lngsMarkers = new Array();
+/* acima: para capturar coordenada para os territórios */
+
 var rectangle = new google.maps.Rectangle();
 var polyGon = new google.maps.Polygon();
 var poly = new google.maps.Polyline();
@@ -94,6 +99,22 @@ function initMap() {
                 var path = poly.getPath();
                 polyGon.setPath(path);
                 polyGon.setMap(Map);
+                
+                /* abaixo: exibir coordenadas do polígono */
+                /* var paths = polyGon.getPath().getArray();
+                ** var lats = '[ ';
+                ** var lngs = '[ ';
+                ** 
+                ** for(var i = 0; i < paths.length; i++){
+                **     lats += paths[i].lat().toFixed(3);
+                **     lngs += paths[i].lng().toFixed(3);
+                **     if(paths.length > i+1) { lats += ', '; lngs += ', '; }
+                **     else { lats += ' ]'; lngs += ' ]'; }
+                ** }
+                **
+                ** console.log(lats);
+                ** console.log(lngs); */
+                /* acima: exibir coordenadas do polígono */
 
                 google.maps.event.addListener(polyGon, 'rightclick', function () {
                     polyGon.setMap(null);
@@ -108,7 +129,7 @@ function initMap() {
 
         outlineMarkers.push(marker);
 
-        google.maps.event.addListener(marker, 'drag', function (dragEvent) {
+        google.maps.event.addListener(marker, 'drag', function (dragEvent) {     
             poly.getPath().setAt(markerIndex, dragEvent.latLng);
             updateDistance(outlineMarkers);
         });
@@ -123,13 +144,13 @@ function initMap() {
         initMap();
     });
 
+    Map.addListener('click', function(e) {
+        //console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3));
+    });
+
     Map.addListener('mouseover', function () {
         Map.addListener('mousemove', function (e) {
             $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
-        });
-
-        Map.addListener('mouseout', function (e) {
-            //mostrar coordenadas
         });
     });
 
@@ -165,12 +186,12 @@ function updateDistance(outlineMarkers) {
     $.each(outlineMarkers, function (index, val) {
         if (last) {
             var dist = google.maps.geometry.spherical.computeDistanceBetween(last.position, val.position) / 1000;
-            console.log('Adicional: ' + parseFloat(dist.toFixed(3)));
+            //console.log('Adicional: ' + parseFloat(dist.toFixed(3)));
             totalDistance += google.maps.geometry.spherical.computeDistanceBetween(last.position, val.position) / 1000;
         }
         last = val;
     });
-    console.log('Total: ' + parseFloat(totalDistance.toFixed(3)))
+    //console.log('Total: ' + parseFloat(totalDistance.toFixed(3)))
     $('#distancia').val(parseFloat(totalDistance.toFixed(3)) + ' Km');
 }
 
@@ -270,7 +291,9 @@ function calcTime() {
 function subMap(){
     var name = $('#pesquisa').val();
     var submap = getSubMap(name);
-    console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
+    //console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
     Map.panTo(new google.maps.LatLng(submap.lat, submap.lng));
     Map.setZoom(submap.zoom);
+    
+    
 }

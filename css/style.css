@@ -113,7 +113,7 @@ html, body {
     font-size: 12.5px;
 }
 
-/* <select> com opições pesquisáveis */
+/* <select> com opiï¿½ï¿½es pesquisï¿½veis */
 
 .bootstrap-select {
     margin: -1px;
@@ -124,4 +124,12 @@ html, body {
     margin: -2px;
     padding: 0;
     height: 40px;
+}
+
+.macro-regiao span.text {
+    font-weight: bold;
+}
+
+.micro-regiao span.text {
+    padding-left: 15px;
 }
