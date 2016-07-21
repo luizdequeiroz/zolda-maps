@@ -2,6 +2,7 @@ var overlayMap;
 var overlayTer;
 
 var terVisible = false;
+var legVisible = false;
 
 var marker;
 var Map;
@@ -154,6 +155,16 @@ function initMap() {
             terVisible = false;
         }
     });
+    
+    document.getElementById('legendas').addEventListener('click', function () {
+        if(!legVisible){
+            $('#map-legendas').css('visibility', 'visible');
+            legVisible = true;
+        } else {
+            $('#map-legendas').css('visibility', 'hidden');
+            legVisible = false;
+        }
+    });
 
     Map.addListener('click', function(e) {
         //console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3));
@@ -240,6 +251,15 @@ USGSOverlay.prototype.onAdd = function () {
     imgTer.style.visibility = 'hidden';
     imgTer.id = 'map-territorios';
     div.appendChild(imgTer);
+
+    var imgLeg = document.createElement('img');
+    imgLeg.src = 'img/AsLegendasConhecidas.png';
+    imgLeg.style.width = '100%';
+    imgLeg.style.height = '100%';
+    imgLeg.style.position = 'absolute';
+    imgLeg.style.visibility = 'hidden';
+    imgLeg.id = 'map-legendas';
+    div.appendChild(imgLeg);
 
     this.div_ = div;
 
