@@ -233,7 +233,7 @@ USGSOverlay.prototype.onAdd = function () {
     div.appendChild(imgMap);
     
     var imgTer = document.createElement('img');
-    imgTer.src = 'img/OsTerritóriosConhecidos.png';
+    imgTer.src = 'img/OsTerritoriosConhecidos.png';
     imgTer.style.width = '100%';
     imgTer.style.height = '100%';
     imgTer.style.position = 'absolute';
