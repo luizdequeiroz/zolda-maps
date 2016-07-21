@@ -1,4 +1,7 @@
-var overlay;
+var overlayMap;
+var overlayTer;
+
+var terVisible = false;
 
 var marker;
 var Map;
@@ -44,12 +47,6 @@ function initMap() {
 
     Map.mapTypes.set('map_style', styledMap);
     Map.setMapTypeId('map_style');
-
-    var bounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
-        new google.maps.LatLng(30.67883861843332, 6.762828376789505));
-
-    var srcImage = 'img/OMundoConhecido.png';
 
     poly = new google.maps.Polyline({
         map: Map,
@@ -137,11 +134,25 @@ function initMap() {
         updateDistance(outlineMarkers);
     });
 
-    overlay = new USGSOverlay(bounds, srcImage, Map);
+    var bounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
+        new google.maps.LatLng(30.67883861843332, 6.762828376789505));
+
+    overlayMap = new USGSOverlay(bounds, Map);
 
     document.getElementById('refresh').addEventListener('click', function () {
         outlineMarkers = new Array();
         initMap();
+    });
+    
+    document.getElementById('territorios').addEventListener('click', function () {
+        if(!terVisible) {
+            $('#map-territorios').css('visibility', 'visible');
+            terVisible = true;
+        } else {
+            $('#map-territorios').css('visibility', 'hidden');
+            terVisible = false;
+        }
     });
 
     Map.addListener('click', function(e) {
@@ -195,10 +206,9 @@ function updateDistance(outlineMarkers) {
     $('#distancia').val(parseFloat(totalDistance.toFixed(3)) + ' Km');
 }
 
-function USGSOverlay(bounds, image, map) {
+function USGSOverlay(bounds, map) {
 
     this.bounds_ = bounds;
-    this.image_ = image;
     this.map_ = map;
 
     this.div_ = null;
@@ -212,13 +222,24 @@ USGSOverlay.prototype.onAdd = function () {
     div.style.borderStyle = 'none';
     div.style.borderWidth = '0px';
     div.style.position = 'absolute';
+    div.id = 'zoldamaps';
 
-    var img = document.createElement('img');
-    img.src = this.image_;
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.position = 'absolute';
-    div.appendChild(img);
+    var imgMap = document.createElement('img');
+    imgMap.src = 'img/OMundoConhecido.png';
+    imgMap.style.width = '100%';
+    imgMap.style.height = '100%';
+    imgMap.style.position = 'absolute';
+    imgMap.id = 'map-conhecido';
+    div.appendChild(imgMap);
+    
+    var imgTer = document.createElement('img');
+    imgTer.src = 'img/OsTerritóriosConhecidos.png';
+    imgTer.style.width = '100%';
+    imgTer.style.height = '100%';
+    imgTer.style.position = 'absolute';
+    imgTer.style.visibility = 'hidden';
+    imgTer.id = 'map-territorios';
+    div.appendChild(imgTer);
 
     this.div_ = div;
 
