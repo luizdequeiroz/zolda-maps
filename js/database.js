@@ -25,7 +25,7 @@
 /*    */{ name: 'gaudur', lat: 21.923, lng: -24.456, zoom: 8, descricao: '' },
     { name: 'sagmatim', lat: 24.607, lng: -17.336, zoom: 6, descricao: '' },
 /*    */{ name: 'daordem', lat: 26.912, lng: -18.556, zoom: 7, descricao: '' },
-/*    */{ name: 'dalei', lat: 21.657, lng: -17.589, zoom: 7, descricao: '' },
+/*    */{ name: 'dalei', lat: 19.969, lng: -17.424, zoom: 7, descricao: '' },
 /*    */{ name: 'dajustica', lat: 22.391, lng: -12.612, zoom: 7, descricao: '' },
 /*    */{ name: 'ajaf', lat: 15.390, lng: -17.622, zoom: 7, descricao: '' },
     { name: 'niogro', lat: 16.784, lng: -4.504, zoom: 6, descricao: '' },
