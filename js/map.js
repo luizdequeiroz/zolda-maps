@@ -27,11 +27,11 @@ var submap;
 function initMap() {
 
     var styles = [
-      {
-          stylers: [
-            { visibility: 'off' }
-          ]
-      }
+        {
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
     ];
 
     var styledMap = new google.maps.StyledMapType(styles, { name: 'Styled Map' });
@@ -124,12 +124,12 @@ function initMap() {
         } else {
             marker.setIcon('img/secondsIcons.png');
         }
-        
+
         poly.getPath().push(event.latLng);
 
         outlineMarkers.push(marker);
 
-        marker.addListener('drag', function (dragEvent) {     
+        marker.addListener('drag', function (dragEvent) {
             poly.getPath().setAt(markerIndex, dragEvent.latLng);
             updateDistance(outlineMarkers);
         });
@@ -137,9 +137,17 @@ function initMap() {
         updateDistance(outlineMarkers);
     });
 
-    if(contReinit == 0) initMenuListeners();
+    if (!terVisible) {
+        $('#territorios').css('background-color', '#fff');
+        $('#territorios').css('color', 'rgb(25, 25, 25)');
+    }
+    if (!legVisible) {
+        $('#legendas').css('background-color', '#fff');
+        $('#legendas').css('color', 'rgb(25, 25, 25)');
+    }
+    if (contReinit == 0) initMenuListeners();
 
-    Map.addListener('click', function(e) {
+    Map.addListener('click', function (e) {
         //console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3));
     });
 
@@ -161,11 +169,11 @@ function initMap() {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
             position: google.maps.ControlPosition.RIGHT_BOTTOM,
             drawingModes: [
-              google.maps.drawing.OverlayType.MARKER,
-              google.maps.drawing.OverlayType.CIRCLE,
-              google.maps.drawing.OverlayType.POLYGON,
-              google.maps.drawing.OverlayType.POLYLINE,
-              google.maps.drawing.OverlayType.RECTANGLE
+                google.maps.drawing.OverlayType.MARKER,
+                google.maps.drawing.OverlayType.CIRCLE,
+                google.maps.drawing.OverlayType.POLYGON,
+                google.maps.drawing.OverlayType.POLYLINE,
+                google.maps.drawing.OverlayType.RECTANGLE
             ]
         },
         markerOptions: { icon: 'img/firstIcon.png' },
@@ -221,7 +229,7 @@ USGSOverlay.prototype.onAdd = function () {
     imgMap.style.position = 'absolute';
     imgMap.id = 'map-conhecido';
     div.appendChild(imgMap);
-    
+
     var imgTer = document.createElement('img');
     imgTer.src = 'img/OsTerritoriosConhecidos.png';
     imgTer.style.width = '100%';
@@ -241,7 +249,6 @@ USGSOverlay.prototype.onAdd = function () {
     div.appendChild(imgLeg);
 
     this.div_ = div;
-
     var panes = this.getPanes();
     panes.overlayLayer.appendChild(div);
 };
@@ -261,6 +268,7 @@ USGSOverlay.prototype.draw = function () {
 };
 
 USGSOverlay.prototype.onRemove = function () {
+    
     this.div_.parentNode.removeChild(this.div_);
     this.div_ = null;
 };
@@ -268,6 +276,7 @@ USGSOverlay.prototype.onRemove = function () {
 google.maps.event.addDomListener(window, 'load', initMap);
 
 function initMenuListeners() {
+    
     document.getElementById('refresh').addEventListener('click', function () {
         outlineMarkers = new Array();
         terVisible = false;
@@ -275,33 +284,42 @@ function initMenuListeners() {
         console.log('Reiniciando Mapa');
         initMap();
     });
-    
+
     document.getElementById('territorios').addEventListener('click', function () {
-        if(!terVisible) {
+        if (!terVisible) {
+            $('#territorios').css('background-color', 'darkgrey');
+            $('#territorios').css('color', '#fff');
             $('#map-territorios').css('visibility', 'visible');
             terVisible = true;
             console.log('Territórios Visível');
         } else {
+            $('#territorios').css('background-color', '#fff');
+            $('#territorios').css('color', 'rgb(25, 25, 25)');
             $('#map-territorios').css('visibility', 'hidden');
             terVisible = false;
             console.log('Territórios invisível');
         }
     });
-    
+
     document.getElementById('legendas').addEventListener('click', function () {
-        if(!legVisible){
+        if (!legVisible) {
+            $('#legendas').css('background-color', 'darkgrey');
+            $('#legendas').css('color', '#fff');
             $('#map-legendas').css('visibility', 'visible');
             legVisible = true;
         } else {
+            $('#legendas').css('background-color', '#fff');
+            $('#legendas').css('color', 'rgb(25, 25, 25)');
             $('#map-legendas').css('visibility', 'hidden');
             legVisible = false;
         }
     });
-    
+
     contReinit++;
 }
 
 function calcTime() {
+    
     var vel = parseFloat($('#modo').val());
 
     if (vel == 0) return;
@@ -317,7 +335,7 @@ function calcTime() {
     else dia = parseInt(hor / 24);
 
     hor = hor - (24 * dia);
-    
+
     var result = "";
     if (dia > 0)
         if (dia > 1) result += dia + ' dias ';
@@ -331,7 +349,7 @@ function calcTime() {
         else result += min + 'min';
 
     if (vel % 2 != 0) {
-        switch(vel){
+        switch (vel) {
             case 4.17: $('#tempo').attr('title', 'descansando 1h e 30min a cada 50km'); break;
             case 7.14: $('#tempo').attr('title', 'descansando 2hs a cada 50km'); break;
             case 11.11: $('#tempo').attr('title', 'descansando 30min a cada 50km'); break;
@@ -342,10 +360,41 @@ function calcTime() {
     $('#tempo').val(result);
 }
 
-function subMap(){
+function subMap() {
+    
     var name = $('#pesquisa').val();
     var submap = getSubMap(name);
     //console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
     Map.panTo(new google.maps.LatLng(submap.lat, submap.lng));
     Map.setZoom(submap.zoom);
 }
+
+function getValueOfParam(parameter) {
+    
+    var loc = location.search.substring(1, location.search.length);
+    var param_value = false;
+    var params = loc.split('&');
+    for (i = 0; i < params.length; i++) {
+        var param_name = params[i].substring(0, params[i].indexOf('='));
+        if (param_name == parameter) {
+            param_value = params[i].substring(params[i].indexOf('=') + 1);
+        }
+    }
+    if (param_value) return param_value;
+    else return false;
+}
+
+$(document).ready(function () {
+    
+    var c = getValueOfParam('c');
+
+    $('#coord').css('visibility', 'hidden');
+    $('#cross').css('visibility', 'hidden');
+
+    if (c == 1) $('#coord').css('visibility', 'visible')
+    else if (c == 2) $('#cross').css('visibility', 'visible');
+    else if (c == 3) {
+        $('#coord').css('visibility', 'visible');
+        $('#cross').css('visibility', 'visible');
+    }
+});

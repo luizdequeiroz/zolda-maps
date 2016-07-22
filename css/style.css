@@ -32,6 +32,10 @@ html, body {
     position: absolute;
 }
 
+.head-control, .group-control, .footer-controls {
+    pointer-events: none;
+}
+
 .btn-control, .panel-control {
     background-color: #fff;
     border: 2px solid #fff;
@@ -47,6 +51,7 @@ html, body {
     padding-right: 10px;
     z-index: 1000;
     width: 38px;
+    pointer-events: all;
 }
 
     .btn-control:hover, .panel-control:hover {
@@ -134,6 +139,8 @@ html, body {
     padding-left: 15px;
 }
 
+/* titles */
+
 div[tit]:hover:after, input[tit]:hover:after { 
     content: attr(tit);
     background-color: #fff;
@@ -163,4 +170,19 @@ h5[tit]:hover:after {
     position: absolute;
     width: 150px;
     padding: 3px;
+}
+
+/* cruz no centro da câmera */
+
+#cross {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    margin: auto;
+    text-align: center;
+    
+    height: 0;
+    
+    z-index: 100000000000;
+    pointer-events: none;
 }

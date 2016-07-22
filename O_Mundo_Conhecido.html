@@ -26,13 +26,13 @@
 </head>
 <body>
     <div class="head-control">
-        <div style="visibility: hidden" class="panel-control first col-md-offset-3 col-sm-offset-3 col-md-3 col-sm-3 draggable">
+        <div id="coord" class="panel-control first col-md-offset-3 col-sm-offset-3 col-md-3 col-sm-3 draggable">
             <h5 class="col-md-5 col-sm-5 context-control">Coordenadas:</h5>
             <input class="col-md-7 col-sm-7 form-component" id="coordenadas" disabled />
         </div>
         <div class="panel-control last col-md-5 col-sm-5 draggable">
             <h5 class="col-md-3 col-sm-3 context-control">Pesquisar:</h5>
-            <select class="col-md-9 col-sm-9 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -">
+            <select class="col-md-9 col-sm-9 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -" autofocus>
                 <option class="macro-regiao" value="cinzenta">O Pouso da Cinzenta</option>
                 <option class="macro-regiao" value="saisepedras">As Terras de Sais e Pedras</option>
                     <option class="micro-regiao" value="dosal">Terras do Sal</option>
@@ -102,6 +102,7 @@
             </div>
         </div>
     </div>
+    <div id="cross"><i class="fa fa-plus"></i></div>
     <div id="map"></div>
 </body>
 </html>
