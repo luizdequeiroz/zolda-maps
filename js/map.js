@@ -1,6 +1,8 @@
 var overlayMap;
 var overlayTer;
 
+var contReinit = 0;
+
 var terVisible = false;
 var legVisible = false;
 
@@ -27,12 +29,12 @@ function initMap() {
     var styles = [
       {
           stylers: [
-            { visibility: "off" }
+            { visibility: 'off' }
           ]
       }
     ];
 
-    var styledMap = new google.maps.StyledMapType(styles, { name: "Styled Map" });
+    var styledMap = new google.maps.StyledMapType(styles, { name: 'Styled Map' });
 
     Map = new google.maps.Map(document.getElementById('map'), {
         zoom: 5,
@@ -60,15 +62,15 @@ function initMap() {
     polyGon = new google.maps.Polygon({
         map: Map,
         path: [],
-        strokeColor: "#FF0000",
+        strokeColor: '#FF0000',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#FF0000",
+        fillColor: '#FF0000',
         fillOpacity: 0.35,
         draggable: true
     });
 
-    google.maps.event.addListener(polyGon, "drag", function (dragEvent) {
+    polyGon.addListener('drag', function (dragEvent) {
         var polyGonPoints = this.getPath().getArray();
         $.each(polyGonPoints, function (index, val) {
             var polyGonPoint = val;
@@ -76,7 +78,7 @@ function initMap() {
         });
     });
 
-    google.maps.event.addListener(Map, "rightclick", function (event) {
+    Map.addListener('rightclick', function (event) {
         //event.preventDefault();
 
         var markerIndex = poly.getPath().length;
@@ -88,12 +90,12 @@ function initMap() {
             draggable: true
         });
 
-        google.maps.event.addListener(marker, 'rightclick', function () {
+        marker.addListener('rightclick', function () {
             marker.setMap(null);
         });
 
         if (isFirstMarker) {
-            google.maps.event.addListener(marker, 'click', function () {
+            marker.addListener('click', function () {
                 var path = poly.getPath();
                 polyGon.setPath(path);
                 polyGon.setMap(Map);
@@ -114,7 +116,7 @@ function initMap() {
                 ** console.log(lngs); */
                 /* acima: exibir coordenadas do polígono */
 
-                google.maps.event.addListener(polyGon, 'rightclick', function () {
+                polyGon.addListener('rightclick', function () {
                     polyGon.setMap(null);
                 });
             });
@@ -127,7 +129,7 @@ function initMap() {
 
         outlineMarkers.push(marker);
 
-        google.maps.event.addListener(marker, 'drag', function (dragEvent) {     
+        marker.addListener('drag', function (dragEvent) {     
             poly.getPath().setAt(markerIndex, dragEvent.latLng);
             updateDistance(outlineMarkers);
         });
@@ -135,36 +137,7 @@ function initMap() {
         updateDistance(outlineMarkers);
     });
 
-    var bounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
-        new google.maps.LatLng(30.67883861843332, 6.762828376789505));
-
-    overlayMap = new USGSOverlay(bounds, Map);
-
-    document.getElementById('refresh').addEventListener('click', function () {
-        outlineMarkers = new Array();
-        initMap();
-    });
-    
-    document.getElementById('territorios').addEventListener('click', function () {
-        if(!terVisible) {
-            $('#map-territorios').css('visibility', 'visible');
-            terVisible = true;
-        } else {
-            $('#map-territorios').css('visibility', 'hidden');
-            terVisible = false;
-        }
-    });
-    
-    document.getElementById('legendas').addEventListener('click', function () {
-        if(!legVisible){
-            $('#map-legendas').css('visibility', 'visible');
-            legVisible = true;
-        } else {
-            $('#map-legendas').css('visibility', 'hidden');
-            legVisible = false;
-        }
-    });
+    if(contReinit == 0) initMenuListeners();
 
     Map.addListener('click', function(e) {
         //console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3));
@@ -175,6 +148,12 @@ function initMap() {
             $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
         });
     });
+
+    var bounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
+        new google.maps.LatLng(30.67883861843332, 6.762828376789505));
+
+    overlayMap = new USGSOverlay(bounds, Map);
 
     var drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
@@ -288,6 +267,40 @@ USGSOverlay.prototype.onRemove = function () {
 
 google.maps.event.addDomListener(window, 'load', initMap);
 
+function initMenuListeners() {
+    document.getElementById('refresh').addEventListener('click', function () {
+        outlineMarkers = new Array();
+        terVisible = false;
+        legVisible = false;
+        console.log('Reiniciando Mapa');
+        initMap();
+    });
+    
+    document.getElementById('territorios').addEventListener('click', function () {
+        if(!terVisible) {
+            $('#map-territorios').css('visibility', 'visible');
+            terVisible = true;
+            console.log('Territórios Visível');
+        } else {
+            $('#map-territorios').css('visibility', 'hidden');
+            terVisible = false;
+            console.log('Territórios invisível');
+        }
+    });
+    
+    document.getElementById('legendas').addEventListener('click', function () {
+        if(!legVisible){
+            $('#map-legendas').css('visibility', 'visible');
+            legVisible = true;
+        } else {
+            $('#map-legendas').css('visibility', 'hidden');
+            legVisible = false;
+        }
+    });
+    
+    contReinit++;
+}
+
 function calcTime() {
     var vel = parseFloat($('#modo').val());
 
@@ -335,6 +348,4 @@ function subMap(){
     //console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
     Map.panTo(new google.maps.LatLng(submap.lat, submap.lng));
     Map.setZoom(submap.zoom);
-    
-    
 }
