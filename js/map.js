@@ -5,6 +5,7 @@ var contReinit = 0;
 
 var terVisible = false;
 var legVisible = false;
+var rotVisible = false;
 
 var marker;
 var Map;
@@ -78,64 +79,7 @@ function initMap() {
         });
     });
 
-    Map.addListener('rightclick', function (event) {
-        //event.preventDefault();
-
-        var markerIndex = poly.getPath().length;
-        poly.setMap(Map);
-        var isFirstMarker = markerIndex === 0;
-        var marker = new google.maps.Marker({
-            map: Map,
-            position: event.latLng,
-            draggable: true
-        });
-
-        marker.addListener('rightclick', function () {
-            marker.setMap(null);
-        });
-
-        if (isFirstMarker) {
-            marker.addListener('click', function () {
-                var path = poly.getPath();
-                polyGon.setPath(path);
-                polyGon.setMap(Map);
-                
-                /* abaixo: exibir coordenadas do polígono */
-                /* var paths = polyGon.getPath().getArray();
-                ** var lats = '[ ';
-                ** var lngs = '[ ';
-                ** 
-                ** for(var i = 0; i < paths.length; i++){
-                **     lats += paths[i].lat().toFixed(3);
-                **     lngs += paths[i].lng().toFixed(3);
-                **     if(paths.length > i+1) { lats += ', '; lngs += ', '; }
-                **     else { lats += ' ]'; lngs += ' ]'; }
-                ** }
-                **
-                ** console.log(lats);
-                ** console.log(lngs); */
-                /* acima: exibir coordenadas do polígono */
-
-                polyGon.addListener('rightclick', function () {
-                    polyGon.setMap(null);
-                });
-            });
-            marker.setIcon('img/firstIcon.png');
-        } else {
-            marker.setIcon('img/secondsIcons.png');
-        }
-
-        poly.getPath().push(event.latLng);
-
-        outlineMarkers.push(marker);
-
-        marker.addListener('drag', function (dragEvent) {
-            poly.getPath().setAt(markerIndex, dragEvent.latLng);
-            updateDistance(outlineMarkers);
-        });
-
-        updateDistance(outlineMarkers);
-    });
+    initMapListeners();
 
     if (!terVisible) {
         $('#territorios').css('background-color', '#fff');
@@ -145,23 +89,16 @@ function initMap() {
         $('#legendas').css('background-color', '#fff');
         $('#legendas').css('color', 'rgb(25, 25, 25)');
     }
+    if (!rotVisible) {
+        $('#rotas').css('background-color', '#fff');
+        $('#rotas').css('color', 'rgb(25, 25, 25)');
+    }
+
     if (contReinit == 0) initMenuListeners();
-
-    Map.addListener('click', function (e) {
-        //console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3));
-    });
-
-    Map.addListener('mouseover', function () {
-        Map.addListener('mousemove', function (e) {
-            $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
-        });
-    });
 
     var bounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
         new google.maps.LatLng(30.67883861843332, 6.762828376789505));
-
-    overlayMap = new USGSOverlay(bounds, Map);
 
     var drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
@@ -187,6 +124,8 @@ function initMap() {
         }
     });
     drawingManager.setMap(Map);
+
+    overlayMap = new USGSOverlay(bounds, Map);
 }
 
 function updateDistance(outlineMarkers) {
@@ -268,19 +207,92 @@ USGSOverlay.prototype.draw = function () {
 };
 
 USGSOverlay.prototype.onRemove = function () {
-    
+
     this.div_.parentNode.removeChild(this.div_);
     this.div_ = null;
 };
 
 google.maps.event.addDomListener(window, 'load', initMap);
 
-function initMenuListeners() {
+function initMapListeners() {
     
+    Map.addListener('rightclick', function (event) {
+        rotas(event);
+    });
+
+    Map.addListener('mouseover', function () {
+        Map.addListener('mousemove', function (e) {
+            $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
+        });
+    });
+}
+
+function rotas(event) {
+    //event.preventDefault();
+
+    var markerIndex = poly.getPath().length;
+    poly.setMap(Map);
+    var isFirstMarker = markerIndex === 0;
+    var marker = new google.maps.Marker({
+        map: Map,
+        position: event.latLng,
+        draggable: true
+    });
+
+    marker.addListener('rightclick', function () {
+        marker.setMap(null);
+    });
+
+    if (isFirstMarker) {
+        marker.addListener('click', function () {
+            var path = poly.getPath();
+            polyGon.setPath(path);
+            polyGon.setMap(Map);
+                
+            /* abaixo: exibir coordenadas do polígono */
+            /* var paths = polyGon.getPath().getArray();
+            ** var lats = '[ ';
+            ** var lngs = '[ ';
+            ** 
+            ** for(var i = 0; i < paths.length; i++){
+            **     lats += paths[i].lat().toFixed(3);
+            **     lngs += paths[i].lng().toFixed(3);
+            **     if(paths.length > i+1) { lats += ', '; lngs += ', '; }
+            **     else { lats += ' ]'; lngs += ' ]'; }
+            ** }
+            **
+            ** console.log(lats);
+            ** console.log(lngs); */
+            /* acima: exibir coordenadas do polígono */
+
+            polyGon.addListener('rightclick', function () {
+                polyGon.setMap(null);
+            });
+        });
+        marker.setIcon('img/firstIcon.png');
+    } else {
+        marker.setIcon('img/secondsIcons.png');
+    }
+
+    poly.getPath().push(event.latLng);
+
+    outlineMarkers.push(marker);
+
+    marker.addListener('drag', function (dragEvent) {
+        poly.getPath().setAt(markerIndex, dragEvent.latLng);
+        updateDistance(outlineMarkers);
+    });
+
+    updateDistance(outlineMarkers);
+}
+
+function initMenuListeners() {
+
     document.getElementById('refresh').addEventListener('click', function () {
         outlineMarkers = new Array();
         terVisible = false;
         legVisible = false;
+        rotVisible = false;
         console.log('Reiniciando Mapa');
         initMap();
     });
@@ -315,11 +327,28 @@ function initMenuListeners() {
         }
     });
 
+    document.getElementById('rotas').addEventListener('click', function () {
+        if (!rotVisible) {
+            $('#rotas').css('background-color', 'darkgrey');
+            $('#rotas').css('color', '#fff');
+            rotVisible = true;
+            Map.addListener('click', function (event) {
+                rotas(event);
+            });
+        } else {
+            $('#rotas').css('background-color', '#fff');
+            $('#rotas').css('color', 'rgb(25, 25, 25)');
+            rotVisible = false;
+            google.maps.event.clearInstanceListeners(Map);
+            initMapListeners();
+        }
+    });
+
     contReinit++;
 }
 
 function calcTime() {
-    
+
     var vel = parseFloat($('#modo').val());
 
     if (vel == 0) return;
@@ -355,13 +384,13 @@ function calcTime() {
             case 11.11: $('#tempo').attr('title', 'descansando 30min a cada 50km'); break;
             case 33.33: $('#tempo').attr('title', 'descansando 30min a cada 50km'); break;
         }
-    }
+    } else $('#tempo').attr('title', '');
 
     $('#tempo').val(result);
 }
 
 function subMap() {
-    
+
     var name = $('#pesquisa').val();
     var submap = getSubMap(name);
     //console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
@@ -370,7 +399,7 @@ function subMap() {
 }
 
 function getValueOfParam(parameter) {
-    
+
     var loc = location.search.substring(1, location.search.length);
     var param_value = false;
     var params = loc.split('&');
@@ -385,7 +414,7 @@ function getValueOfParam(parameter) {
 }
 
 $(document).ready(function () {
-    
+
     var c = getValueOfParam('c');
 
     $('#coord').css('visibility', 'hidden');

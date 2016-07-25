@@ -26,13 +26,13 @@
 </head>
 <body>
     <div class="head-control">
-        <div id="coord" class="panel-control first col-md-offset-3 col-sm-offset-3 col-md-3 col-sm-3 draggable">
+        <div id="coord" class="panel-control first col-md-offset-3 col-sm-offset-2 col-md-3 col-sm-3 draggable hidden-xs">
             <h5 class="col-md-5 col-sm-5 context-control">Coordenadas:</h5>
             <input class="col-md-7 col-sm-7 form-component" id="coordenadas" disabled />
         </div>
-        <div class="panel-control last col-md-5 col-sm-5 draggable">
-            <h5 class="col-md-3 col-sm-3 context-control">Pesquisar:</h5>
-            <select class="col-md-9 col-sm-9 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -" autofocus>
+        <div id="pesq" class="panel-control last col-md-5 col-sm-5 draggable">
+            <h5 class="col-md-3 context-control hidden-sm hidden-xs">Pesquisar:</h5>
+            <select class="col-md-9 col-sm-12 col-xs-12 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -" autofocus>
                 <option class="macro-regiao" value="cinzenta">O Pouso da Cinzenta</option>
                 <option class="macro-regiao" value="saisepedras">As Terras de Sais e Pedras</option>
                     <option class="micro-regiao" value="dosal">Terras do Sal</option>
@@ -78,15 +78,16 @@
         <div class="btn-control" id="refresh" tit="Reiniciar"><i class="fa fa-refresh"></i><!--&nbsp;<span>Reiniciar</span>--></div>
         <div class="btn-control" id="territorios" tit="Territórios"><i class="fa fa-map"></i><!--&nbsp;<span>Territórios</span>--></div>
         <div class="btn-control" id="legendas" tit="Legendas"><i class="fa fa-font"></i><!--&nbsp;<span>Legendas</span>--></div>
+        <div class="btn-control" id="rotas" tit="Traçar Rotas"><i class="fa fa-location-arrow"></i><!--&nbsp;<span>Traçar Rotas</span>--></div>
     </div>
     <div class="footer-controls">
         <div class="float-left">
-            <div class="panel-control first col-md-4 col-sm-4 draggable">
-                <h5 class="col-md-4 col-sm-4 context-control">Distância:</h5>
-                <input class="col-md-8 col-sm-8" id="distancia" />
+            <div class="panel-control first col-md-4 col-sm-4 col-xs-12 draggable">
+                <h5 class="col-md-4 col-sm-4 col-xs-2 context-control">Distância:</h5>
+                <input class="col-md-8 col-sm-8 col-xs-6" id="distancia" />
             </div>
-            <div class="panel-control last col-md-8 col-sm-8 draggable">
-                <h5 class="col-md-4 col-sm-4 context-control" tit="Estimativa (desconsiderando tipo do terreno)">Tempo de Viagem</h5>
+            <div class="panel-control last col-md-8 col-sm-8 col-xs-12 draggable">
+                <h5 id="text-tempo-viagem" class="col-md-4 col-sm-4 context-control" tit="Estimativa (desconsiderando tipo do terreno)">Tempo de Viagem</h5>
                 <select id="modo" class="form-component" onchange="calcTime()" title="- Selecione -">
                     <option value="0" selected>- Selecione -</option>
                     <option value="4.17">Passos Curtos</option><!-- desc -->
@@ -104,5 +105,6 @@
     </div>
     <div id="cross"><i class="fa fa-plus"></i></div>
     <div id="map"></div>
+    <div class="footer-controls-mob hidden-lg hidden-md">Footer Controls Mobile</div>
 </body>
 </html>

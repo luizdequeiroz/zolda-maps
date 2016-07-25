@@ -20,7 +20,7 @@ html, body {
 
 .group-control {
     margin: 15px;
-    z-index: 1000;
+    z-index: 100;
     position: absolute;
 }
 
@@ -49,7 +49,7 @@ html, body {
     line-height: 38px;
     padding-left: 10px;
     padding-right: 10px;
-    z-index: 1000;
+    z-index: 10;
     width: 38px;
     pointer-events: all;
 }
@@ -94,7 +94,7 @@ html, body {
     width: 167px;
 }
 
-#territorios, #legendas {
+#territorios, #legendas, #rotas {
     margin-top: 10px;
 }
 
@@ -123,6 +123,11 @@ html, body {
 .bootstrap-select {
     margin: -1px;
     padding: 0;
+    z-index: 1000;
+}
+
+.dropdown-menu {
+    z-index: 10000;
 }
 
 .dropdown-toggle {
@@ -183,6 +188,74 @@ h5[tit]:hover:after {
     
     height: 0;
     
-    z-index: 100000000000;
+    z-index: 100000;
     pointer-events: none;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 925px) {
+   
+   #coord {
+       display: none;
+   }
+       
+   #pesq {
+       margin-left: 15%;
+   }    
+       
+    .footer-controls {
+        margin-bottom: 60px;
+    }
+    
+    #text-tempo-viagem, #modo {
+        width: 50%;
+    }
+    
+    #text-tempo-viagem {
+        font-size: 12px;
+        float: left;
+    }
+    
+    #modo {
+        float: right;
+    }
+    
+    #tempo {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 768px){
+    
+    div[tit]:hover:after, input[tit]:hover:after { 
+        display: none;
+    }
+
+    h5[tit]:hover:after {
+        display: none;
+    }
+    
+    #pesq {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    
+    #pesq {
+       width: 100%;
+       padding: 0;
+       margin-left: 0;
+       z-index: 1000000;
+    }
+        
+    #pesquisa {
+        margin: 0;
+    }
+    
+    .group-control {
+        margin-top: 70px;
+    }
 }
