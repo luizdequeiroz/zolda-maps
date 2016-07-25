@@ -100,6 +100,8 @@ function initMap() {
         new google.maps.LatLng(-5.134475371454281, -79.50845859491564),
         new google.maps.LatLng(30.67883861843332, 6.762828376789505));
 
+    overlayMap = new USGSOverlay(bounds, Map);
+
     var drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: true,
         drawingControlOptions: {
@@ -124,8 +126,6 @@ function initMap() {
         }
     });
     drawingManager.setMap(Map);
-
-    overlayMap = new USGSOverlay(bounds, Map);
 }
 
 function updateDistance(outlineMarkers) {
