@@ -24,6 +24,7 @@ var outlineMarkers = new Array();
 USGSOverlay.prototype = new google.maps.OverlayView();
 
 var submap;
+var label = 'Olá Mundo!';
 
 function initMap() {
 
@@ -40,7 +41,7 @@ function initMap() {
     Map = new google.maps.Map(document.getElementById('map'), {
         zoom: 5,
         minZoom: 4,
-        maxZoom: 8,
+        maxZoom: 9,
         center: new google.maps.LatLng(14, -35),
         mapTypeControl: false,
         streetViewControl: false,
@@ -55,7 +56,7 @@ function initMap() {
     poly = new google.maps.Polyline({
         map: Map,
         path: [],
-        strokeColor: 'darkblue',
+        strokeColor: 'white',
         strokeOpacity: 1.0,
         strokeWeight: 2
     });
@@ -63,10 +64,10 @@ function initMap() {
     polyGon = new google.maps.Polygon({
         map: Map,
         path: [],
-        strokeColor: '#FF0000',
+        strokeColor: 'whitesmoke',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#FF0000',
+        fillColor: 'darkgrey',
         fillOpacity: 0.35,
         draggable: true
     });
@@ -215,7 +216,7 @@ USGSOverlay.prototype.onRemove = function () {
 google.maps.event.addDomListener(window, 'load', initMap);
 
 function initMapListeners() {
-    
+
     Map.addListener('rightclick', function (event) {
         rotas(event);
     });
@@ -224,6 +225,10 @@ function initMapListeners() {
         Map.addListener('mousemove', function (e) {
             $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
         });
+    });
+
+    Map.addListener('click', function (e) {
+        console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3) + '\npinLat: ' + e.latLng.lat().toFixed(3) + ', pinLng: ' + e.latLng.lng().toFixed(3));
     });
 }
 
@@ -238,9 +243,16 @@ function rotas(event) {
         position: event.latLng,
         draggable: true
     });
+    
+    mapMarkers.push(marker);
 
     marker.addListener('rightclick', function () {
         marker.setMap(null);
+        mapMarkers.pop();
+        if(mapMarkers.length == 0){
+            outlineMarkers = new Array();
+            while(poly.getPath().length > 0) poly.getPath().pop();
+        }
     });
 
     if (isFirstMarker) {
@@ -286,6 +298,53 @@ function rotas(event) {
     updateDistance(outlineMarkers);
 }
 
+function activeTer() {
+    if (!terVisible) {
+        $('#territorios').css('background-color', 'darkgrey');
+        $('#territorios').css('color', '#fff');
+        $('#map-territorios').css('visibility', 'visible');
+        terVisible = true;
+        console.log('Territórios Visível');
+    } else {
+        $('#territorios').css('background-color', '#fff');
+        $('#territorios').css('color', 'rgb(25, 25, 25)');
+        $('#map-territorios').css('visibility', 'hidden');
+        terVisible = false;
+        console.log('Territórios invisível');
+    }
+}
+
+function activeLeg() {
+    if (!legVisible) {
+        $('#legendas').css('background-color', 'darkgrey');
+        $('#legendas').css('color', '#fff');
+        $('#map-legendas').css('visibility', 'visible');
+        legVisible = true;
+    } else {
+        $('#legendas').css('background-color', '#fff');
+        $('#legendas').css('color', 'rgb(25, 25, 25)');
+        $('#map-legendas').css('visibility', 'hidden');
+        legVisible = false;
+    }
+}
+
+function activeRot() {
+    if (!rotVisible) {
+        $('#rotas').css('background-color', 'darkgrey');
+        $('#rotas').css('color', '#fff');
+        rotVisible = true;
+        Map.addListener('click', function (event) {
+            rotas(event);
+        });
+    } else {
+        $('#rotas').css('background-color', '#fff');
+        $('#rotas').css('color', 'rgb(25, 25, 25)');
+        rotVisible = false;
+        google.maps.event.clearInstanceListeners(Map);
+        initMapListeners();
+    }
+}
+
 function initMenuListeners() {
 
     document.getElementById('refresh').addEventListener('click', function () {
@@ -298,50 +357,15 @@ function initMenuListeners() {
     });
 
     document.getElementById('territorios').addEventListener('click', function () {
-        if (!terVisible) {
-            $('#territorios').css('background-color', 'darkgrey');
-            $('#territorios').css('color', '#fff');
-            $('#map-territorios').css('visibility', 'visible');
-            terVisible = true;
-            console.log('Territórios Visível');
-        } else {
-            $('#territorios').css('background-color', '#fff');
-            $('#territorios').css('color', 'rgb(25, 25, 25)');
-            $('#map-territorios').css('visibility', 'hidden');
-            terVisible = false;
-            console.log('Territórios invisível');
-        }
+        activeTer();
     });
 
     document.getElementById('legendas').addEventListener('click', function () {
-        if (!legVisible) {
-            $('#legendas').css('background-color', 'darkgrey');
-            $('#legendas').css('color', '#fff');
-            $('#map-legendas').css('visibility', 'visible');
-            legVisible = true;
-        } else {
-            $('#legendas').css('background-color', '#fff');
-            $('#legendas').css('color', 'rgb(25, 25, 25)');
-            $('#map-legendas').css('visibility', 'hidden');
-            legVisible = false;
-        }
+        activeLeg();
     });
 
     document.getElementById('rotas').addEventListener('click', function () {
-        if (!rotVisible) {
-            $('#rotas').css('background-color', 'darkgrey');
-            $('#rotas').css('color', '#fff');
-            rotVisible = true;
-            Map.addListener('click', function (event) {
-                rotas(event);
-            });
-        } else {
-            $('#rotas').css('background-color', '#fff');
-            $('#rotas').css('color', 'rgb(25, 25, 25)');
-            rotVisible = false;
-            google.maps.event.clearInstanceListeners(Map);
-            initMapListeners();
-        }
+        activeRot();
     });
 
     contReinit++;
@@ -389,11 +413,41 @@ function calcTime() {
     $('#tempo').val(result);
 }
 
+function setPin(is, lat, lng, descricao) {
+    var pin = new google.maps.Marker({
+        map: Map,
+        position: new google.maps.LatLng(lat, lng),
+        title: descricao
+    });
+    if(is==1) pin.setIcon('img/reino-pin-45x50.png');
+    else if(is==2) pin.setIcon('img/reino-pin-60x67.png');
+    else pin.setIcon('img/reino-pin-102x114.png');
+    
+    pin.addListener('rightclick', function () {
+        pin.setMap(null);        
+    });
+}
+
 function subMap() {
 
     var name = $('#pesquisa').val();
     var submap = getSubMap(name);
     //console.log('name: ' + submap.name + ' | lat: ' + submap.lat + ' | lng: ' + submap.lng + ' | zoom: ' + submap.zoom);
+    if (submap.pinLat != 0 || submap.pinLng != 0) {
+        terVisible = false;
+        activeTer();
+        setPin(1, submap.pinLat, submap.pinLng, submap.descricao);
+    } else if ($('#pesquisa').val() != 'cinzenta'
+            && $('#pesquisa').val() != 'saisepedras' 
+            && $('#pesquisa').val() != 'maraba' 
+            && $('#pesquisa').val() != 'fieldon' 
+            && $('#pesquisa').val() != 'zionr' 
+            && $('#pesquisa').val() != 'matim' 
+            && $('#pesquisa').val() != 'confins' 
+            && $('#pesquisa').val() != 'sagmatim' 
+            && $('#pesquisa').val() != 'niogro' 
+            && $('#pesquisa').val() != 'mileni') setPin(2, submap.lat, submap.lng, submap.descricao);
+    else setPin(3, submap.lat, submap.lng, submap.descricao);
     Map.panTo(new google.maps.LatLng(submap.lat, submap.lng));
     Map.setZoom(submap.zoom);
 }
