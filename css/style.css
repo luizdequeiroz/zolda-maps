@@ -144,6 +144,11 @@ html, body {
     padding-left: 15px;
 }
 
+.capital-regiao span.text {
+    font: italic 14px Roboto, Arial, sans-serif;
+    padding-left: 30px;
+}
+
 /* titles */
 
 div[tit]:hover:after, input[tit]:hover:after { 
