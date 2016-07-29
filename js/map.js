@@ -251,6 +251,7 @@ function rotas(event) {
         mapMarkers.pop();
         if(mapMarkers.length == 0){
             outlineMarkers = new Array();
+            polyGon.setMap(null);
             while(poly.getPath().length > 0) poly.getPath().pop();
         }
     });
