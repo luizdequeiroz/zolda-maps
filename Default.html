@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>O Mundo Conhecido</title>
+    <link rel="icon" href="img/brasao-d&a.png" />
+    <link rel="stylesheet" type="text/css" href="bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKcouVUJNd_vt-oqt8zUWh-6Cp5aHwH_4&signed_in=true&libraries=drawing"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <!--<link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />-->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/rpg-awesome.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/map.js"></script>
+    <script>
+        $(function () {
+            $('.draggable').draggable();
+        });
+    </script>
+</head>
+<body>
+    <div class="head-control">
+        <div id="coord" class="panel-control first col-md-offset-3 col-sm-offset-2 col-md-3 col-sm-3 draggable hidden-xs">
+            <h5 class="col-md-5 col-sm-5 context-control">Coordenadas:</h5>
+            <input class="col-md-7 col-sm-7 form-component" id="coordenadas" disabled />
+        </div>
+        <div id="pesq" class="panel-control last col-md-5 col-sm-5 draggable">
+            <h5 class="col-md-3 context-control hidden-sm hidden-xs">Pesquisar:</h5>
+            <select class="col-md-9 col-sm-12 col-xs-12 form-component selectpicker" id="pesquisa" onchange="subMap()" data-live-search="true" title="- Pesquise um lugar -" autofocus>
+                <option class="macro-regiao" value="cinzenta">O Pouso da Cinzenta</option>
+                <option class="macro-regiao" value="saisepedras">As Terras de Sais e Pedras</option>
+                    <option class="micro-regiao" value="dosal">Terras do Sal</option>
+                    <option class="micro-regiao" value="dapedra">Terras da Pedra</option>
+                    <option class="micro-regiao" value="detheus">Terras de Theus</option>
+                <option class="macro-regiao" value="maraba">O Braço de Marabá</option>
+                    <option class="micro-regiao" value="dosvelhos">Ilha dos Velhos</option>
+                    <option class="micro-regiao" value="dastrocas">Ilha das Trocas</option>
+                    <option class="micro-regiao" value="dopoder">Ilha do Poder</option>
+                    <option class="micro-regiao" value="dasentenca">Terras da Sentença</option>
+                    <option class="micro-regiao" value="dezerai">O Estreito de Zerai</option>
+                <option class="macro-regiao" value="fieldon">As Terras Árduas de Fieldon</option>
+                <option class="macro-regiao" value="zionr">As Terras Árduas de Zionr</option>
+                <option class="macro-regiao" value="matim">As Terras de Matím</option>
+                    <option class="micro-regiao" value="estreito">O Estreito</option>
+                    <option class="micro-regiao" value="dacruz">Terras da Cruz</option>
+                    <option class="micro-regiao" value="zionarrs">Terras dos Zionarrs</option>
+                    <option class="micro-regiao" value="homens1">Terras dos Homens (de Matím)</option>
+                    <option class="micro-regiao" value="monstros">Terras dos Monstros</option>
+                <option class="macro-regiao" value="confins">Os Confins da Terra</option>
+                    <option class="micro-regiao" value="bruxos">Terras dos Bruxos</option>
+                    <option class="micro-regiao" value="cerco">Domínio Perdido de Cerco</option>
+                    <option class="micro-regiao" value="docaos">Floresta do Caos (Terras do Caos)</option>
+                    <option class="micro-regiao" value="gaudur">Floresta de Gaudur (Terras de Gaudur)</option>
+                <option class="macro-regiao" value="sagmatim">As Terras de SagMátim</option>
+                    <option class="micro-regiao" value="docaos">Qa'os (Terras do Caos)</option>
+                    <option class="micro-regiao" value="daordem">Am'bá (Terras da Ordem)</option>
+                    <option class="micro-regiao" value="gaudur">Gau'dur</option>
+                    <option class="micro-regiao" value="dalei">Ya'jad (Terras da Lei)</option>
+                    <option class="micro-regiao" value="dajustica">Rad'afan (Terras da Justiça)</option>
+                    <option class="micro-regiao" value="ajaf">Aj'af</option>
+                <option class="macro-regiao" value="niogro">O Deserto de Niogro</option>
+                <option class="macro-regiao" value="mileni">As Terras de Mileni</option>
+                    <option class="micro-regiao" value="dedaeldon">Deserto de Daeldon (Deserto de Niogro)</option>
+                    <option class="micro-regiao" value="acropole">Campos Acropole</option>
+                    <option class="micro-regiao" value="propicios">Terras dos Propícios</option>
+                    <option class="micro-regiao" value="barbados">Terras dos Barbados</option>
+                    <option class="micro-regiao" value="homens2">Terras dos Homens (de Mileni)</option>
+            </select>
+        </div>
+    </div>
+    <div class="group-control">
+        <div class="btn-control" id="refresh" tit="Reiniciar"><i class="fa fa-refresh"></i><!--&nbsp;<span>Reiniciar</span>--></div>
+        <div class="btn-control" id="territorios" tit="Territórios"><i class="fa fa-map"></i><!--&nbsp;<span>Territórios</span>--></div>
+        <div class="btn-control" id="legendas" tit="Legendas"><i class="fa fa-font"></i><!--&nbsp;<span>Legendas</span>--></div>
+        <div class="btn-control" id="rotas" tit="Rotas"><i class="fa fa-location-arrow"></i><!--&nbsp;<span>Rotas</span>--></div>
+    </div>
+    <div class="footer-controls">
+        <div class="float-left">
+            <div class="panel-control first col-md-4 col-sm-4 col-xs-12 draggable">
+                <h5 class="col-md-4 col-sm-4 col-xs-2 context-control">Distância:</h5>
+                <input class="col-md-8 col-sm-8 col-xs-6" id="distancia" />
+            </div>
+            <div class="panel-control last col-md-8 col-sm-8 col-xs-12 draggable">
+                <h5 id="text-tempo-viagem" class="col-md-4 col-sm-4 context-control" tit="Estimativa (desconsiderando tipo do terreno)">Tempo de Viagem</h5>
+                <select id="modo" class="form-component" onchange="calcTime()" title="- Selecione -">
+                    <option value="0" selected>- Selecione -</option>
+                    <option value="4.17">Passos Curtos</option><!-- desc -->
+                    <option value="7.14">Passos Longos</option><!-- desc -->
+                    <option value="11.11">Galopes Curtos</option><!-- desc -->
+                    <option value="33.33">Galopes Longos</option><!-- desc -->
+                    <option value="20.0">Velas Curtas</option><!-- ndesc -->
+                    <option value="34.0">Velas Longas</option><!-- ndesc -->
+                    <option value="100.0">Voo Lento</option><!-- ndesc -->
+                    <option value="300.0">Voo Rápido</option><!-- ndesc -->
+                </select>
+                <input class="col-md-4 col-sm-4" id="tempo" disabled />
+            </div>
+        </div>
+    </div>
+    <div id="cross"><i class="fa fa-plus"></i></div>
+    <div id="map"></div>
+    <div class="hidden-lg hidden-md">Luiz de Queiroz, o Mestre do Remix</div>
+</body>
+</html>
