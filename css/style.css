@@ -94,7 +94,7 @@ html, body {
     width: 167px;
 }
 
-#territorios, #legendas, #rotas {
+#territorios, #legendas, #rotas, #remover {
     margin-top: 10px;
 }
 
@@ -150,38 +150,38 @@ html, body {
 }
 
 /* titles */
-
-div[tit]:hover:after, input[tit]:hover:after { 
-    content: attr(tit);
-    background-color: #fff;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    text-align: center;
-    color: rgb(25, 25, 25);
-    font-family: Roboto, Arial, sans-serif;
-    font-size: 14px;
-    position: absolute;
-    width: 80px;
+@media screen and (min-width: 925px) {
+    div[tit]:hover:after, input[tit]:hover:after { 
+        content: attr(tit);
+        background-color: #fff;
+        border: 2px solid #fff;
+        border-radius: 3px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        text-align: center;
+        color: rgb(25, 25, 25);
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 14px;
+        position: absolute;
+        width: 80px;
+    }
+    
+    h5[tit]:hover:after {
+        content: attr(tit);
+        background-color: #fff;
+        border: 2px solid #fff;
+        border-radius: 3px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        text-align: center;
+        color: rgb(25, 25, 25);
+        font-family: Roboto, Arial, sans-serif;
+        font-size: 14px;
+        position: absolute;
+        width: 150px;
+        padding: 3px;
+    }
 }
-
-h5[tit]:hover:after {
-    content: attr(tit);
-    background-color: #fff;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    text-align: center;
-    color: rgb(25, 25, 25);
-    font-family: Roboto, Arial, sans-serif;
-    font-size: 14px;
-    position: absolute;
-    width: 150px;
-    padding: 3px;
-}
-
 /* cruz no centro da câmera */
 
 #cross {
@@ -263,4 +263,18 @@ h5[tit]:hover:after {
     .group-control {
         margin-top: 70px;
     }
+}
+
+/* Modal */
+
+.modal-dialog{
+      overflow-y: initial !important;
+}
+.modal-body{
+  height: 450px;
+  overflow-y: auto;
+}
+
+p {
+    text-align: justify;
 }
