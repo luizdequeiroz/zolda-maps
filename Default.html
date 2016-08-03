@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>O Mundo Conhecido</title>
     <link rel="icon" href="img/brasao-d&a.png" />
     <link rel="stylesheet" type="text/css" href="bootstrap-select/dist/css/bootstrap-select.min.css">
@@ -49,27 +49,55 @@
                 <option class="macro-regiao" value="matim">As Terras de Matím</option>
                     <option class="micro-regiao" value="estreito">O Estreito</option>
                     <option class="micro-regiao" value="dacruz">Terra da Cruz</option>
+                        <option class="capital-regiao" value="niwtan">Niwtan (Cidade na Montanha)</option>
+                        <option class="capital-regiao" value="cruz">Cruz (Cidade na Encruza)</option>
+                        <option class="capital-regiao" value="ponte">Ponte (Cidade na Ponta)</option>
                     <option class="micro-regiao" value="zionarrs">Terra dos Zionarrs</option>
+                        <option class="capital-regiao" value="deroff">Deroff (Fortaleza de Deroff)</option>
                     <option class="micro-regiao" value="homens1">Terra dos Homens (de Matím)</option>
+                        <option class="capital-regiao" value="nord" title="teste">Nord (Capital da União)</option>
+                        <option class="capital-regiao" value="con">Con</option>
+                        <option class="capital-regiao" value="fendy">Fendy</option>
+                        <option class="capital-regiao" value="celda">Celda (Floresta Druida)</option>
+                        <option class="capital-regiao" value="vall">Vall</option>
+                        <option class="capital-regiao" value="pens">Pens</option>
                     <option class="micro-regiao" value="monstros">Terra dos Monstros</option>
+                        <option class="capital-regiao" value="desc">Desc (Fortaleza de Saara)</option>
                 <option class="macro-regiao" value="confins">Os Confins da Terra</option>
                     <option class="micro-regiao" value="bruxos">Terra dos Bruxos</option>
+                        <option class="capital-regiao" value="stron">Stron</option>
+                        <option class="capital-regiao" value="venia">Vênia</option>
+                        <option class="capital-regiao" value="laican">Laican</option>
+                        <option class="capital-regiao" value="bruce">Bruce</option>
+                        <option class="capital-regiao" value="catan">Catan</option>
                     <option class="micro-regiao" value="cerco">Domínio Perdido de Cerco</option>
                     <option class="micro-regiao" value="docaos">Floresta do Caos (Terra do Caos)</option>
                     <option class="micro-regiao" value="gaudur">Floresta de Gaudur (Terra de Gaudur)</option>
                 <option class="macro-regiao" value="sagmatim">As Terras de SagMátim</option>
                     <option class="micro-regiao" value="docaos2">Qa'os (Terra do Caos)</option>
                     <option class="micro-regiao" value="daordem">Am'bá (Terra da Ordem)</option>
+                        <option class="capital-regiao" value="gaumid">Nova Gaumid</option>
+                        <option class="capital-regiao" value="aladmid">Aladmid</option>
+                        <option class="capital-regiao" value="mamur">Nova Mamur</option>
+                        <option class="capital-regiao" value="amba">Ambá (Cidadela da Ordem)</option>
                     <option class="micro-regiao" value="gaudur2">Gau'dur</option>
                     <option class="micro-regiao" value="dalei">Ya'jad (Terra da Lei)</option>
+                        <option class="capital-regiao" value="gaudur">Nova Gaudur</option>
+                        <option class="capital-regiao" value="yajad">Yajad (Cidadela da Lei)</option>
+                        <option class="capital-regiao" value="ajaf">Ajaf</option>
+                        <option class="capital-regiao" value="nasmid">Nasmid</option>
                     <option class="micro-regiao" value="dajustica">Rad'afan (Terra da Justiça)</option>
-                    <option class="micro-regiao" value="ajaf">Aj'af</option>
+                        <option class="capital-regiao" value="radyafan">Radyafan (Cidadela da Justiça)</option>
+                        <option class="capital-regiao" value="haser">Haser</option>
+                        <option class="capital-regiao" value="nazafe">Nazafe</option>
+                        <option class="capital-regiao" value="lamar">Lamar</option>
+                    <option class="micro-regiao" value="ajaf2">Aj'af</option>
                 <option class="macro-regiao" value="niogro">O Deserto de Niogro</option>
                 <option class="macro-regiao" value="mileni">As Terras de Mileni</option>
                     <option class="micro-regiao" value="dedaeldon">Deserto de Daeldon (Deserto de Niogro)</option>
                     <option class="micro-regiao" value="acropole">Campos Acrópole</option>
                     <option class="micro-regiao" value="propicios">Terra dos Propícios</option>
-                        <option class="capital-regiao" value="nieldin">Nieldin</option>
+                        <option class="capital-regiao" value="nieldin">Nieldin (Cidadela)</option>
                         <option class="capital-regiao" value="nascente">Nascente</option>
                         <option class="capital-regiao" value="movilas">Campos Movilás</option>
                         <option class="capital-regiao" value="sagmain">Sagmain</option>
@@ -88,9 +116,10 @@
     </div>
     <div class="group-control">
         <div class="btn-control" id="refresh" tit="Reiniciar"><i class="fa fa-refresh"></i><!--&nbsp;<span>Reiniciar</span>--></div>
+        <div class="btn-control" id="rotas" tit="+ Destinos"><i class="fa fa-location-arrow"></i><!--&nbsp;<span>Rotas</span>--></div>
+        <div class="btn-control" id="remover" tit="- Destinos"><i class="fa fa-times"></i><!--&nbsp;<span>Remover</span>--></div>
         <div class="btn-control" id="territorios" tit="Territórios"><i class="fa fa-map"></i><!--&nbsp;<span>Territórios</span>--></div>
         <div class="btn-control" id="legendas" tit="Legendas"><i class="fa fa-font"></i><!--&nbsp;<span>Legendas</span>--></div>
-        <div class="btn-control" id="rotas" tit="Rotas"><i class="fa fa-location-arrow"></i><!--&nbsp;<span>Rotas</span>--></div>
     </div>
     <div class="footer-controls">
         <div class="float-left">
@@ -117,6 +146,23 @@
     </div>
     <div id="cross"><i class="fa fa-plus"></i></div>
     <div id="map"></div>
+    <div id="chamar" class="modal fade mothal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><strong id="descricao"></strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="text-form">
+                        <div id="informacoes"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="hidden-lg hidden-md">Luiz de Queiroz, o Mestre do Remix</div>
 </body>
 </html>
