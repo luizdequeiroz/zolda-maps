@@ -6,6 +6,9 @@ var contReinit = 0;
 var terVisible = false;
 var legVisible = false;
 var rotVisible = false;
+var remVisible = false;
+
+var pogVisible = false;
 
 var marker;
 var Map;
@@ -24,7 +27,6 @@ var outlineMarkers = new Array();
 USGSOverlay.prototype = new google.maps.OverlayView();
 
 var submap;
-var label = 'Olá Mundo!';
 
 function initMap() {
 
@@ -69,7 +71,7 @@ function initMap() {
         strokeWeight: 2,
         fillColor: 'darkgrey',
         fillOpacity: 0.35,
-        draggable: true
+        draggable: false
     });
 
     polyGon.addListener('drag', function (dragEvent) {
@@ -93,6 +95,10 @@ function initMap() {
     if (!rotVisible) {
         $('#rotas').css('background-color', '#fff');
         $('#rotas').css('color', 'rgb(25, 25, 25)');
+    }
+    if (!remVisible) {
+        $('#remover').css('background-color', '#fff');
+        $('#remover').css('color', 'rgb(25, 25, 25)');
     }
 
     if (contReinit == 0) initMenuListeners();
@@ -217,18 +223,15 @@ google.maps.event.addDomListener(window, 'load', initMap);
 
 function initMapListeners() {
 
-    Map.addListener('rightclick', function (event) {
-        rotas(event);
+    Map.addListener('click', function (e) {
+        console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3) + '\npinLat: ' + e.latLng.lat().toFixed(3) + ', pinLng: ' + e.latLng.lng().toFixed(3));
+        if (rotVisible) rotas(e);
     });
 
     Map.addListener('mouseover', function () {
         Map.addListener('mousemove', function (e) {
             $('#coordenadas').val('Lat ' + e.latLng.lat().toFixed(3) + ' | Lng ' + e.latLng.lng().toFixed(3));
         });
-    });
-
-    Map.addListener('click', function (e) {
-        console.log('lat: ' + e.latLng.lat().toFixed(3) + ', lng: ' + e.latLng.lng().toFixed(3) + '\npinLat: ' + e.latLng.lat().toFixed(3) + ', pinLng: ' + e.latLng.lng().toFixed(3));
     });
 }
 
@@ -237,30 +240,46 @@ function rotas(event) {
 
     var markerIndex = poly.getPath().length;
     poly.setMap(Map);
-    var isFirstMarker = markerIndex === 0;
     var marker = new google.maps.Marker({
         map: Map,
         position: event.latLng,
         draggable: true
     });
-    
+
     mapMarkers.push(marker);
 
     marker.addListener('rightclick', function () {
         marker.setMap(null);
         mapMarkers.pop();
-        if(mapMarkers.length == 0){
+        if (mapMarkers.length == 0) {
             outlineMarkers = new Array();
-            polyGon.setMap(null);
-            while(poly.getPath().length > 0) poly.getPath().pop();
+            if (!pogVisible)
+                while (poly.getPath().length > 0) poly.getPath().pop();
         }
     });
 
-    if (isFirstMarker) {
-        marker.addListener('click', function () {
+    if (mapMarkers.length == 1) {
+        marker.setIcon('img/firstIcon.png');
+    } else {
+        marker.setIcon('img/secondsIcons.png');
+    }
+
+    marker.addListener('click', function () {
+        if (remVisible) {
+            marker.setMap(null);
+            mapMarkers.pop();
+            if (mapMarkers.length == 0) {
+                outlineMarkers = new Array();
+                if (!pogVisible)
+                    while (poly.getPath().length > 0) poly.getPath().pop();
+            }
+            return;
+        }
+        if (mapMarkers[0] == marker) {
             var path = poly.getPath();
             polyGon.setPath(path);
             polyGon.setMap(Map);
+            pogVisible = true;            
                 
             /* abaixo: exibir coordenadas do polígono */
             /* var paths = polyGon.getPath().getArray();
@@ -280,12 +299,21 @@ function rotas(event) {
 
             polyGon.addListener('rightclick', function () {
                 polyGon.setMap(null);
+                if (mapMarkers.length == 0)
+                    while (poly.getPath().length > 0) poly.getPath().pop();
+                pogVisible = false;
             });
-        });
-        marker.setIcon('img/firstIcon.png');
-    } else {
-        marker.setIcon('img/secondsIcons.png');
-    }
+
+            polyGon.addListener('click', function () {
+                if (remVisible) {
+                    polyGon.setMap(null);
+                    if (mapMarkers.length == 0)
+                        while (poly.getPath().length > 0) poly.getPath().pop();
+                    pogVisible = false;
+                }
+            });
+        }
+    });
 
     poly.getPath().push(event.latLng);
 
@@ -334,39 +362,60 @@ function activeRot() {
         $('#rotas').css('background-color', 'darkgrey');
         $('#rotas').css('color', '#fff');
         rotVisible = true;
-        Map.addListener('click', function (event) {
-            rotas(event);
-        });
+
+        $('#remover').css('background-color', '#fff');
+        $('#remover').css('color', 'rgb(25, 25, 25)');
+        remVisible = false;
     } else {
         $('#rotas').css('background-color', '#fff');
         $('#rotas').css('color', 'rgb(25, 25, 25)');
         rotVisible = false;
-        google.maps.event.clearInstanceListeners(Map);
-        initMapListeners();
     }
+}
+
+function activeRem() {
+    if (!remVisible) {
+        $('#remover').css('background-color', 'darkgrey');
+        $('#remover').css('color', '#fff');
+        remVisible = true;
+
+        $('#rotas').css('background-color', '#fff');
+        $('#rotas').css('color', 'rgb(25, 25, 25)');
+        rotVisible = false;
+    } else {
+        $('#remover').css('background-color', '#fff');
+        $('#remover').css('color', 'rgb(25, 25, 25)');
+        remVisible = false;
+    }
+}
+
+function reInit() {
+    outlineMarkers = new Array();
+    terVisible = false;
+    legVisible = false;
+    rotVisible = false;
+    remVisible = false;
+    console.log('Reiniciando Mapa');
+    initMap();
 }
 
 function initMenuListeners() {
 
-    document.getElementById('refresh').addEventListener('click', function () {
-        outlineMarkers = new Array();
-        terVisible = false;
-        legVisible = false;
-        rotVisible = false;
-        console.log('Reiniciando Mapa');
-        initMap();
-    });
+    document.getElementById('refresh').addEventListener('click', reInit);
+    document.getElementById('rotas').addEventListener('click', activeRot);
+    document.getElementById('remover').addEventListener('click', activeRem);
+    document.getElementById('territorios').addEventListener('click', activeTer);
+    document.getElementById('legendas').addEventListener('click', activeLeg);
 
-    document.getElementById('territorios').addEventListener('click', function () {
-        activeTer();
-    });
+    document.addEventListener('keydown', function () {
+        var key = event.keyCode;
+        var str = String.fromCharCode(key);
 
-    document.getElementById('legendas').addEventListener('click', function () {
-        activeLeg();
-    });
-
-    document.getElementById('rotas').addEventListener('click', function () {
-        activeRot();
+        if (str == 'R' || key == 27) reInit();
+        if (str == '+' || key == 17) activeRot();
+        if (str == '-' || key == 16) activeRem();
+        if (str == 'T' || str == 'M') activeTer();
+        if (str == 'A' || str == 'L') activeLeg();
     });
 
     contReinit++;
@@ -414,19 +463,42 @@ function calcTime() {
     $('#tempo').val(result);
 }
 
-function setPin(is, lat, lng, descricao) {
+function openModal(name) {
+    var submap = getSubMap(name);
+
+    $('.mothal').find('#informacoes').empty();
+
+    $('.mothal').find('#descricao').text(submap.descricao);
+    $('.mothal').find('#informacoes').load('info/' + name + '.html');
+    if (document.getElementById('informacoes').innerHTML == '')
+        $('.mothal').find('#informacoes').text("Ainda não catalogado!");
+
+    $(".mothal").modal();
+}
+
+function setPin(lat, lng, name, descricao, resumo) {
     var pin = new google.maps.Marker({
         map: Map,
         position: new google.maps.LatLng(lat, lng),
         title: descricao
     });
-    if(is==1) pin.setIcon('img/reino-pin-45x50.png');
-    else if(is==2) pin.setIcon('img/reino-pin-60x67.png');
-    else pin.setIcon('img/reino-pin-102x114.png');
-    
+    pin.setIcon('img/point.png');
+
     pin.addListener('rightclick', function () {
-        pin.setMap(null);        
+        pin.setMap(null);
     });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: "<strong>" + descricao + "</strong><br />"
+        + "<p>" + resumo + "</p><br />"
+        + "<p style='float: right'><a style='cursor: pointer' id='" + name + "' onclick='openModal(this.id)'>Leia mais</a></p>"
+    });
+
+    pin.addListener('click', function () {
+        infowindow.open(Map, pin);
+    });
+
+    infowindow.open(Map, pin);
 }
 
 function subMap() {
@@ -437,18 +509,8 @@ function subMap() {
     if (submap.pinLat != 0 || submap.pinLng != 0) {
         terVisible = false;
         activeTer();
-        setPin(1, submap.pinLat, submap.pinLng, submap.descricao);
-    } else if ($('#pesquisa').val() != 'cinzenta'
-            && $('#pesquisa').val() != 'saisepedras' 
-            && $('#pesquisa').val() != 'maraba' 
-            && $('#pesquisa').val() != 'fieldon' 
-            && $('#pesquisa').val() != 'zionr' 
-            && $('#pesquisa').val() != 'matim' 
-            && $('#pesquisa').val() != 'confins' 
-            && $('#pesquisa').val() != 'sagmatim' 
-            && $('#pesquisa').val() != 'niogro' 
-            && $('#pesquisa').val() != 'mileni') setPin(2, submap.lat, submap.lng, submap.descricao);
-    else setPin(3, submap.lat, submap.lng, submap.descricao);
+        setPin(submap.pinLat, submap.pinLng, submap.name, submap.descricao, submap.resumo);
+    } else setPin(submap.lat, submap.lng, submap.name, submap.descricao, submap.resumo);
     Map.panTo(new google.maps.LatLng(submap.lat, submap.lng));
     Map.setZoom(submap.zoom);
 }
@@ -458,7 +520,7 @@ function getValueOfParam(parameter) {
     var loc = location.search.substring(1, location.search.length);
     var param_value = false;
     var params = loc.split('&');
-    for (i = 0; i < params.length; i++) {
+    for (var i = 0; i < params.length; i++) {
         var param_name = params[i].substring(0, params[i].indexOf('='));
         if (param_name == parameter) {
             param_value = params[i].substring(params[i].indexOf('=') + 1);
