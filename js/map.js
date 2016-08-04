@@ -108,31 +108,6 @@ function initMap() {
         new google.maps.LatLng(30.67883861843332, 6.762828376789505));
 
     overlayMap = new USGSOverlay(bounds, Map);
-
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControl: true,
-        drawingControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.RIGHT_BOTTOM,
-            drawingModes: [
-                google.maps.drawing.OverlayType.MARKER,
-                google.maps.drawing.OverlayType.CIRCLE,
-                google.maps.drawing.OverlayType.POLYGON,
-                google.maps.drawing.OverlayType.POLYLINE,
-                google.maps.drawing.OverlayType.RECTANGLE
-            ]
-        },
-        markerOptions: { icon: 'img/firstIcon.png' },
-        circleOptions: {
-            fillColor: '#ffff00',
-            fillOpacity: 1,
-            strokeWeight: 5,
-            clickable: false,
-            editable: true,
-            zIndex: 1
-        }
-    });
-    drawingManager.setMap(Map);
 }
 
 function updateDistance(outlineMarkers) {
