@@ -210,7 +210,10 @@ html, body {
    }    
        
     .footer-controls {
-        margin-bottom: 60px;
+        margin: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
     }
     
     #text-tempo-viagem, #modo {
@@ -244,6 +247,30 @@ html, body {
     
     #pesq {
         width: 80%;
+    }
+}
+
+@media screen and (max-height: 411px){
+    
+    #refresh, #territorios, #legendas, #rotas, #remover {
+        margin: 0;
+    }    
+}
+
+@media screen and (max-height: 320px){
+    
+    #pesq {
+        height: 38px;
+        margin-top: -15px;
+        top: 0;
+    }
+    
+    #refresh, #territorios, #legendas, #rotas, #remover {
+        height: 38px;
+    } 
+    
+    .group-control {
+        margin: 0;
     }
 }
 
